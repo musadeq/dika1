@@ -1,7 +1,9 @@
-#Format
-nama-ddmmyyyy.xls
+[![N|Solid](http://blog.negerisendiri.com/uploads/susu_cap_nona6_2.jpg)](https://www.stackoverflow.com)
 
-#Verse 1
+# Format
+**nama-ddmmyyyy.xls
+**
+# Verse 1
 - Let's take our time tonight, girl
 - Above us all the stars are watchin'
 - There's no place I'd rather be in this world
@@ -12,7 +14,7 @@ nama-ddmmyyyy.xls
 - What we're feelin' inside
 - Right now
 
-#Pre-Chorus
+# Pre-Chorus
 - So, baby, let's just turn down the lights
 - And close the door
 - Oooh I love that dress
@@ -20,14 +22,14 @@ nama-ddmmyyyy.xls
 - No, you won't need it no more
 - Let's just kiss 'til we're naked, baby
 
-#Chorus
+#  Chorus
 - Versace on the floor
 - Oooh take it off for me, for me, for me, for me now, girl
 - Versace on the floor
 - Oooh take it off for me, for me, for me, for me now, girl
 - eemmmmhhh
 
-#Verse 2
+# Verse 2
 - Now I unzip the back to watch it fall
 - While I kiss your neck and shoulders
 - No, don't be afraid to show it all
@@ -37,7 +39,7 @@ nama-ddmmyyyy.xls
 - Don't be confused by my smile
 - 'Cause I ain't ever been more for real, for real
 
-#Pre-Chorus
+# Pre-Chorus
 - So just turn down the lights
 - And close the door
 - Oooh I love that dress
@@ -45,17 +47,17 @@ nama-ddmmyyyy.xls
 - No, you won't need it no more
 - Let's just kiss 'til we're naked, baby
 
-#Chorus
+# Chorus
 - Versace on the floor
 - Oooh take it off for me, for me, for me, for me now, girl
 - Versace on the floor
 - Oooh take it off for me, for me, for me, for me now, girl
 - Dance!!!!!
 
-#Interlude 
-- eeee oe oe eoeoooo eeoeooo teeotetot teotetot totoetotetot teotetoteeeee totetotee eoeoteoeototo eoeoe eoo oeee eoo oeee oeee oeeoeoe eeeeeeeeeeeeeeeeee eo oe eo eee eeee
+# Interlude 
+- **eeee oe oe eoeoooo eeoeooo teeotetot teotetot totoetotetot teotetoteeeee totetotee eoeoteoeototo eoeoe eoo oeee eoo oeee oeee oeeoeoe eeeeeeeeeeeeeeeeee eo oe eo eee eeee**
 
-#Bridge
+# Bridge
 - It's warmin' up
 - Can you feel it?
 - It's warmin' up
@@ -66,14 +68,14 @@ nama-ddmmyyyy.xls
 - Oh, seems like you're ready for more, more, more
 - Let's just kiss 'til we're naked
 
-#Chorus
+# Chorus
 - Versace on the floor
 - Hey, baby
 - Take it off for me, for me, for me, for me now, girl
 - Versace on the floor
 - Oooh take it off for me, for me, for me, for me now, girl
 
-#Outro
+# Outro
 - Versace on the floor
 - Floor
 - Floor
