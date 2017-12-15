@@ -179,7 +179,6 @@ class UploadController extends AppBaseController
         $date = $this->getDateFromFile($upload->filename);
         $excel = Excel::load($file)->ignoreEmpty()->get();
 
-
         foreach ($excel as $row) {
             if ($upload->category == 'pembelian') {
                 $create = new Purchase();
@@ -198,7 +197,7 @@ class UploadController extends AppBaseController
                 $create->total = $row->total_harga;
                 $create->upload_id = $upload->id;
             }
-
+            if ($row->kode_obat)
             $create->save();
         }
 
@@ -211,7 +210,8 @@ class UploadController extends AppBaseController
     private function getDateFromFile($filename)
     {
         preg_match('/(.+?)(\.[^.]*$|$)/', $filename, $out);
-        return Carbon::createFromFormat('dmY', explode('_', $out[1])[1]);
+        return Carbon::createFromFormat('d-m-Y', $out[1]);
+
     }
 
     private function uploadFile($file, $category)
