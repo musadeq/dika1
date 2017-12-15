@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateUploadRequest;
 use App\Http\Requests\UpdateUploadRequest;
 use App\Models\Purchase;
+use App\Models\Sale;
 use App\Models\Upload;
 use App\Repositories\UploadRepository;
 use App\Http\Controllers\AppBaseController;
@@ -35,7 +36,9 @@ class UploadController extends AppBaseController
     public function index(Request $request)
     {
         $this->uploadRepository->pushCriteria(new RequestCriteria($request));
-        $uploads = $this->uploadRepository->all();
+        $uploads = $this->uploadRepository
+            ->orderBy('id', 'desc')
+            ->get();
 
         return view('uploads.index')
             ->with('uploads', $uploads);
@@ -153,6 +156,8 @@ class UploadController extends AppBaseController
 
         if ($upload->category == 'pembelian') {
             $upload->purchases()->delete();
+        }else{
+            $upload->sales()->delete();
         }
         $this->uploadRepository->delete($id);
 
@@ -169,7 +174,7 @@ class UploadController extends AppBaseController
             return response()->view('errors.404', [], 404);
         }
 
-        $file = "data/$upload->type/$upload->filename";
+        $file = "data/$upload->category/$upload->filename";
 
         $date = $this->getDateFromFile($upload->filename);
         $excel = Excel::load($file)->ignoreEmpty()->get();
@@ -178,15 +183,22 @@ class UploadController extends AppBaseController
         foreach ($excel as $row) {
             if ($upload->category == 'pembelian') {
                 $create = new Purchase();
+                $create->code = $row->kode_obat;
+                $create->ref = $row->ref_number;
+                $create->amount = $row->jumlah_obat;
+                $create->total = $row->total_biaya;
+                $create->upload_id = $upload->id;
+                $create->created_at = $date;
             } else {
-                $create = null;
+                $create = new Sale();
+                $create->code = $row->kode_obat;
+                $create->transaction_number = $row->no_transaksi;
+                $create->nik = $row->nik;
+                $create->amount = $row->jumlah_obat;
+                $create->total = $row->total_harga;
+                $create->upload_id = $upload->id;
             }
-            $create->code = $row->kode_obat;
-            $create->ref = $row->ref_number;
-            $create->amount = $row->jumlah_obat;
-            $create->total = $row->total_biaya;
-            $create->upload_id = $upload->id;
-            $create->created_at = $date;
+
             $create->save();
         }
 

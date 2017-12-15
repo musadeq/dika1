@@ -36,7 +36,7 @@
 @endsection
 @section('content')
     <section class="content-header">
-        <h1 class="pull-left">Review</h1>
+        <h1 class="pull-left">REVIEW {{strtoupper($upload->category)}}</h1>
     </section>
     <div class="content">
         <div class="clearfix"></div>
@@ -46,7 +46,11 @@
         <div class="clearfix"></div>
         <div class="box box-primary">
             <div class="box-body">
-                @include('uploads.table_review')
+                @if($upload->category == 'penjualan')
+                    @include('uploads.table_penjualan_review')
+                @else
+                    @include('uploads.table_pembelian_review')
+                @endif
                 <div class="col-md-1 nopadding">
                     <div class="col-sm-6 nopadding">
                         {!! Form::open(['route' => ['uploads.import', $upload->id]]) !!}
