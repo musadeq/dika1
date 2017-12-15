@@ -10,7 +10,7 @@
     <tbody>
     @foreach($uploads as $upload)
         <tr>
-            <td><a href="{{url("data/$upload->type/$upload->filename")}}">{!! $upload->filename !!}</a></td>
+            <td><a href="{{url("data/$upload->category/$upload->filename")}}">{!! $upload->filename !!}</a></td>
             <td>{!! $upload->category !!}</td>
             <td>{!! $upload->user->name !!}</td>
             <td>

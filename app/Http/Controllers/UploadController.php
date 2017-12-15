@@ -66,7 +66,7 @@ class UploadController extends AppBaseController
         }
 
         $request['user_id'] = Auth::id();
-        $request['filename'] = $this->uploadFile($request->file('file'));
+        $request['filename'] = $this->uploadFile($request->file('file'), $request->category);
 
         $input = $request->all();
 
@@ -91,7 +91,7 @@ class UploadController extends AppBaseController
             return response()->view('errors.404', [], 404);
         }
 
-        $file = "data/$upload->type/$upload->filename";
+        $file = "data/$upload->category/$upload->filename";
         $excel = Excel::load($file)->ignoreEmpty()->get();
         return view('uploads.show', compact('excel', 'upload'));
     }
@@ -202,9 +202,9 @@ class UploadController extends AppBaseController
         return Carbon::createFromFormat('dmY', explode('_', $out[1])[1]);
     }
 
-    private function uploadFile($file)
+    private function uploadFile($file, $category)
     {
-        $path = 'data';
+        $path = "data/$category/";
         $name = $file->getClientOriginalName();
         $file->move($path, $name);
         return $name;
