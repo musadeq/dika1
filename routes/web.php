@@ -23,3 +23,5 @@ Route::resource('uploads', 'UploadController');
 Route::post('uploads/import/{id}', 'UploadController@import')->name('uploads.import');
 
 Route::resource('sales', 'SaleController');
+
+Route::resource('audits', 'AuditController');
