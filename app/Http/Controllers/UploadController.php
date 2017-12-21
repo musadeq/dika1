@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Criteria\StockCriteria;
 use App\Http\Requests\CreateUploadRequest;
 use App\Http\Requests\UpdateUploadRequest;
 use App\Models\Purchase;
 use App\Models\Sale;
+use App\Models\Stock;
 use App\Models\Upload;
 use App\Repositories\UploadRepository;
 use App\Http\Controllers\AppBaseController;
@@ -156,7 +158,7 @@ class UploadController extends AppBaseController
 
         if ($upload->category == 'pembelian') {
             $upload->purchases()->delete();
-        }else{
+        } else {
             $upload->sales()->delete();
         }
         $this->uploadRepository->delete($id);
@@ -179,6 +181,7 @@ class UploadController extends AppBaseController
         $date = $this->getDateFromFile($upload->filename);
         $excel = Excel::load($file)->ignoreEmpty()->get();
 
+
         foreach ($excel as $row) {
             if ($upload->category == 'pembelian') {
                 $create = new Purchase();
@@ -188,6 +191,7 @@ class UploadController extends AppBaseController
                 $create->total = $row->total_biaya;
                 $create->upload_id = $upload->id;
                 $create->created_at = $date;
+                $this->addStock($date, $create->code, $create->amount);
             } else {
                 $create = new Sale();
                 $create->code = $row->kode_obat;
@@ -196,8 +200,9 @@ class UploadController extends AppBaseController
                 $create->amount = $row->jumlah_obat;
                 $create->total = $row->total_harga;
                 $create->upload_id = $upload->id;
+                $this->subStock($date, $create->code, $create->amount);
             }
-            if ($row->kode_obat)
+
             $create->save();
         }
 
@@ -210,8 +215,7 @@ class UploadController extends AppBaseController
     private function getDateFromFile($filename)
     {
         preg_match('/(.+?)(\.[^.]*$|$)/', $filename, $out);
-        return Carbon::createFromFormat('d-m-Y', $out[1]);
-
+        return Carbon::createFromFormat('dmY', explode('_', $out[1])[1]);
     }
 
     private function uploadFile($file, $category)
@@ -222,5 +226,19 @@ class UploadController extends AppBaseController
         return $name;
     }
 
+
+    private function addStock($date, $code, $amount)
+    {
+        $stock = Stock::firstOrNew(['code'=>$code]);
+        $stock->amount += $amount;
+        $stock->save();
+    }
+
+    private function subStock($date, $code, $amount)
+    {
+        $stock = Stock::firstOrNew(['code'=>$code]);
+        $stock->amount -= $amount;
+        $stock->save();
+    }
 
 }

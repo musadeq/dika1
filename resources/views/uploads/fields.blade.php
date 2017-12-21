@@ -4,7 +4,7 @@
 </div>
 <div class="form-group col-sm-12">
     {!! Form::label('upload', 'upload excel pembelian:') !!}
-    {!! Form::file('file', ['class' => 'form-control']) !!}
+    {!! Form::file('file', ['class' => 'form-control', 'accept'=>".xls,.xlsx"]) !!}
 </div>
 
 <!-- Submit Field -->

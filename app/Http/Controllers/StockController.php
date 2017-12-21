@@ -2,36 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Criteria\StockCriteria;
 use App\Http\Requests\CreateSaleRequest;
 use App\Http\Requests\UpdateSaleRequest;
-use App\Models\Sale;
-use App\Models\Stock;
 use App\Repositories\SaleRepository;
 use App\Http\Controllers\AppBaseController;
+use App\Repositories\StockRepository;
 use Illuminate\Http\Request;
 use Flash;
 use Prettus\Repository\Criteria\RequestCriteria;
 use Response;
 
-class SaleController extends AppBaseController
+class StockController extends AppBaseController
 {
     /** @var  SaleRepository */
-    private $saleRepository;
+    private $stockRepository;
 
-    private function addStock($code, $amount)
+    public function __construct(StockRepository $stockRepository)
     {
-        $stock = Stock::firstOrNew(['code'=>$code]);
-        $stock->amount += $amount;
-        $stock->save();
-    }
-
-    public function __construct(SaleRepository $saleRepo)
-    {
-        $this->saleRepository = $saleRepo;
-    }
-
-    public function getIdsByCode() {
-        return Sale::distinct()->pluck('code') ;
+        $this->stockRepository = $stockRepository;
     }
 
     /**
@@ -42,11 +31,13 @@ class SaleController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $this->saleRepository->pushCriteria(new RequestCriteria($request));
-        $sales = $this->saleRepository->all();
 
-        return view('sales.index')
-            ->with('sales', $sales);
+        $this->stockRepository->pushCriteria(new RequestCriteria($request));
+        $this->stockRepository->pushCriteria(StockCriteria::class);
+        $stocks = $this->stockRepository->all();
+
+        return view('stocks.index')
+            ->with('stocks', $stocks);
     }
 
     /**
@@ -71,8 +62,6 @@ class SaleController extends AppBaseController
         $input = $request->all();
 
         $sale = $this->saleRepository->create($input);
-
-        $this->addStock($request->code,$request->amount);
 
         Flash::success('Sale saved successfully.');
 
