@@ -23,6 +23,10 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css">
     <style>
+        body, .btn {
+            font-size: 12px;
+        }
+
         .nopadding {
             padding: 0 !important;
             margin: 0 !important;
