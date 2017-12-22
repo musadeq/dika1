@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreatePurchaseRequest;
 use App\Http\Requests\UpdatePurchaseRequest;
+use App\Models\Purchase;
 use App\Models\Upload;
 use App\Repositories\PurchaseRepository;
 use App\Http\Controllers\AppBaseController;
@@ -63,6 +64,10 @@ class PurchaseController extends AppBaseController
 
 //        $this->saveExcel("$path/$name");
 
+    }
+
+    public function getIdsByCode() {
+        return Purchase::distinct()->pluck('code') ;
     }
 
 

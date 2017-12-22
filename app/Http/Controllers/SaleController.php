@@ -30,9 +30,6 @@ class SaleController extends AppBaseController
         $this->saleRepository = $saleRepo;
     }
 
-    public function getIdsByCode() {
-        return Sale::distinct()->pluck('code') ;
-    }
 
     /**
      * Display a listing of the Sale.
