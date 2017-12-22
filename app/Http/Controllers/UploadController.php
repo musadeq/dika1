@@ -157,7 +157,11 @@ class UploadController extends AppBaseController
         }
 
         if ($upload->category == 'pembelian') {
-            $upload->purchases()->delete();
+            $purchases = $upload->purchases();
+            foreach ($purchases->get() as $purchase){
+                $this->subStock($purchase->code, $purchase->amount);
+            }
+            $purchases->delete();
         } else {
             $upload->sales()->delete();
         }
@@ -191,7 +195,7 @@ class UploadController extends AppBaseController
                 $create->total = $row->total_biaya;
                 $create->upload_id = $upload->id;
                 $create->created_at = $date;
-                $this->addStock($date, $create->code, $create->amount);
+                $this->addStock($create->code, $create->amount);
             } else {
                 $create = new Sale();
                 $create->code = $row->kode_obat;
@@ -200,7 +204,7 @@ class UploadController extends AppBaseController
                 $create->amount = $row->jumlah_obat;
                 $create->total = $row->total_harga;
                 $create->upload_id = $upload->id;
-                $this->subStock($date, $create->code, $create->amount);
+                $this->subStock($create->code, $create->amount);
             }
 
             $create->save();
@@ -227,14 +231,14 @@ class UploadController extends AppBaseController
     }
 
 
-    private function addStock($date, $code, $amount)
+    private function addStock($code, $amount)
     {
         $stock = Stock::firstOrNew(['code'=>$code]);
         $stock->amount += $amount;
         $stock->save();
     }
 
-    private function subStock($date, $code, $amount)
+    private function subStock($code, $amount)
     {
         $stock = Stock::firstOrNew(['code'=>$code]);
         $stock->amount -= $amount;

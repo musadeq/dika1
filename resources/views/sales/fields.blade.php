@@ -1,7 +1,7 @@
 <!-- Code Field -->
 <div class="form-group col-sm-3">
     {!! Form::label('code', 'Code:') !!}
-    <select class="form-control select2" name="classification">
+    <select class="form-control select2" name="code">
         @if (@$purchase)
             <option selected>{!! $purchase->code !!}</option>
         @endif
@@ -14,6 +14,15 @@
 <div class="form-group col-sm-3">
     {!! Form::label('transaction_number', 'Transaction Number:') !!}
     {!! Form::text('transaction_number', null, ['class' => 'form-control']) !!}
+</div>
+
+<div class="row"></div>
+
+
+<!-- Nik Field -->
+<div class="form-group col-sm-3">
+    {!! Form::label('nik', 'NIK:') !!}
+    {!! Form::text('nik', null, ['class' => 'form-control']) !!}
 </div>
 
 <div class="row"></div>
@@ -33,7 +42,7 @@
 </div>
 
 <div class="row"></div>
-
+<input type="hidden" name="upload_id" value="0">
 <!-- Submit Field -->
 <div class="form-group col-sm-12">
     {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
@@ -52,10 +61,9 @@
                 dataType: 'json',
                 processResults: function (data) {
                     // Tranforms the top-level key of the response object from 'items' to 'results'
-                    var test = 1;
                     ndata = data.map(function(a){
                         return {
-                            id: test++,
+                            id: a,
                             text:a
                         }
                     });

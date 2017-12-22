@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateSaleManualRequest;
 use App\Http\Requests\CreateSaleRequest;
 use App\Http\Requests\UpdateSaleRequest;
 use App\Models\Sale;
@@ -20,8 +21,15 @@ class SaleController extends AppBaseController
 
     private function addStock($code, $amount)
     {
-        $stock = Stock::firstOrNew(['code'=>$code]);
+        $stock = Stock::firstOrNew(['code' => $code]);
         $stock->amount += $amount;
+        $stock->save();
+    }
+
+    private function subStock($code, $amount)
+    {
+        $stock = Stock::firstOrNew(['code' => $code]);
+        $stock->amount -= $amount;
         $stock->save();
     }
 
@@ -69,12 +77,13 @@ class SaleController extends AppBaseController
 
         $sale = $this->saleRepository->create($input);
 
-        $this->addStock($request->code,$request->amount);
+        $this->subStock($request->code, $request->amount);
 
         Flash::success('Sale saved successfully.');
 
         return redirect(route('sales.index'));
     }
+
 
     /**
      * Display the specified Sale.
@@ -119,7 +128,7 @@ class SaleController extends AppBaseController
     /**
      * Update the specified Sale in storage.
      *
-     * @param  int              $id
+     * @param  int $id
      * @param UpdateSaleRequest $request
      *
      * @return Response
@@ -158,6 +167,7 @@ class SaleController extends AppBaseController
             return redirect(route('sales.index'));
         }
 
+        $this->addStock($sale->code, $sale->amount);
         $this->saleRepository->delete($id);
 
         Flash::success('Sale deleted successfully.');

@@ -10,6 +10,8 @@
         <th class="text-center">
             <div>Date</div>
         </th>
+        <th class="text-center">Tipe</th>
+        <th class="text-center">Action</th>
     </tr>
     </thead>
     <tbody>
@@ -22,12 +24,26 @@
             <td>{!! $sale->amount !!}</td>
             <td>{!! $sale->total !!}</td>
             <td>{!! $sale->created_at->format('d/m/Y') !!}</td>
+            <td>{!! $sale->upload_id ? "Upload Excel" : "Manual Input"!!}</td>
+            <td>
+                @if($sale->upload_id)
+                    {!! Form::open(['route' => ['uploads.destroy', $sale->upload_id], 'method' => 'delete']) !!}
+                    {!! Form::button('<i class="glyphicon glyphicon-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Semua data ".$sale->upload->filename." akan dihapus!')"]) !!}
+                    {!! Form::close() !!}
+                @else
+                    {!! Form::open(['route' => ['sales.destroy', $sale->id], 'method' => 'delete']) !!}
+                    {!! Form::button('<i class="glyphicon glyphicon-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Yakin ingin menghapus data?')"]) !!}
+                    {!! Form::close() !!}
+                @endif
+            </td>
         </tr>
     @endforeach
     </tbody>
     <tfoot>
     <tr>
         <th style="padding-left:0" class="text-left"></th>
+        <th class="text-center"></th>
+        <th class="text-center"></th>
         <th class="text-center"></th>
         <th class="text-center"></th>
         <th class="text-center"></th>

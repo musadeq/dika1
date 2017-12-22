@@ -57,5 +57,16 @@ class Sale extends Model
         'total' => 'required'
     ];
 
+    public static $rules_manual = [
+        'code' => 'required',
+        'nik' => 'required',
+        'transaction_number' => 'required',
+        'amount' => 'required',
+        'total' => 'required'
+    ];
+
+    public function upload(){
+        return $this->belongsTo(Upload::class);
+    }
     
 }
