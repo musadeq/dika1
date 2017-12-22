@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Criteria\StockCriteria;
 use App\Http\Requests\CreateUploadRequest;
 use App\Http\Requests\UpdateUploadRequest;
 use App\Models\Purchase;
@@ -228,72 +229,16 @@ class UploadController extends AppBaseController
 
     private function addStock($date, $code, $amount)
     {
-        $last_stock = Stock::whereCode($code)
-            ->whereDate('created_at', '<=', $date)
-            ->orderBy('id','desc')
-            ->first(); //ambil stok paling akhir sebelum atau sama dgn tanggal $date
-
-        if (!$last_stock) {
-            //stok terakhir tidak ditemukan, buat stock baru
-            Stock::create([
-                'code' => $code,
-                'amount' => $amount,
-                'created_at' => $date
-            ]);
-
-            return true;
-        }
-
-        if ($last_stock->created_at->format('dmy') == $date->format('dmy')) {
-            //stok dengan tanggal $date sudah ada, maka tambahkan stok yang ada (jika kebodohan terjadi (dibaca: 2x upload dgn tanggal yg sama))
-            $last_stock->amount += $amount;
-            $last_stock->created_at = $date;
-            $last_stock->save();
-        } else {
-            //stok tanggal xxx blm ada, tambah dengan stok tanggal sebelumnya
-            Stock::create([
-                'code' => $code,
-                'amount' => $last_stock->amount + $amount,
-                'created_at' => $date
-            ]);
-        }
-
-        return true;
+        $stock = Stock::firstOrNew(['code'=>$code]);
+        $stock->amount += $amount;
+        $stock->save();
     }
 
     private function subStock($date, $code, $amount)
     {
-        $last_stock = Stock::whereCode($code)
-            ->whereDate('created_at', '<=', $date->format('Y-m-d'))
-            ->orderBy('id','desc')
-            ->first(); //ambil stok paling akhir sebelum atau sama dgn tanggal $date
-        if (!$last_stock) {
-            //jika stok tidak tersedia, tapi di daily penjualan ada, maka akan terjadi minus.
-            Stock::create([
-                'code' => $code,
-                'amount' => 0 - $amount,
-                'created_at' => $date
-            ]);
-
-            return true;
-        }
-
-
-        if ($last_stock->created_at->format('dmy') == $date->format('dmy')) {
-            //stok dengan tanggal $date sudah dibuat, maka kurangi stok yang ada (jika kebodohan terjadi (dibaca: 2x upload dgn tanggal yg sama))
-            $last_stock->created_at = $date;
-            $last_stock->amount -= $amount;
-            $last_stock->save();
-        } else {
-            //stok tanggal $date blm ada, buat dgn value hasil dari pengurangan stok di tanggal sebelumnya
-            Stock::create( [
-                'code' => $code,
-                'amount' => $last_stock->amount - $amount,
-                'created_at' => $date
-            ]);
-        }
-
-        return true;
+        $stock = Stock::firstOrNew(['code'=>$code]);
+        $stock->amount -= $amount;
+        $stock->save();
     }
 
 }
